@@ -142,6 +142,7 @@ Transform:
   m_LocalScale: {x: 1, y: .25236848, z: 3.0539577}
   m_Children:
   - {fileID: 1877950245}
+  - {fileID: 1781158311}
   m_Father: {fileID: 0}
 --- !u!114 &849384815
 MonoBehaviour:
@@ -302,6 +303,50 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!1 &1781158310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1781158311}
+  - 114: {fileID: 1781158313}
+  m_Layer: 0
+  m_Name: RoecketLauncher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1781158311
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1781158310}
+  m_LocalRotation: {x: 0, y: -.344743431, z: 0, w: .93869704}
+  m_LocalPosition: {x: .0332774296, y: .466769278, z: -.0982921496}
+  m_LocalScale: {x: .718271077, y: 3.96246004, z: .609172761}
+  m_Children: []
+  m_Father: {fileID: 849384814}
+--- !u!114 &1781158313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1781158310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a0770b63c26c742a0dce48be9eab74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WeaponObject: {fileID: 100000, guid: 73e105909f65a304fa15f4fdfc9969b2, type: 2}
+  OurPlayer: {fileID: 849384816}
+  weaponOffset: {x: 0, y: 2, z: 0}
+  attackRate: 3
+  RocketObject: {fileID: 5400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
+  RocketOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1877950244
 GameObject:
   m_ObjectHideFlags: 0
