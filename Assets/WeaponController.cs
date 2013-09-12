@@ -8,8 +8,8 @@ public class WeaponController : MonoBehaviour {
 	public Vector3 weaponOffset;
 	public float attackRate;
 
-	private float nextAttack;
-	private bool iAttack;
+	protected float nextAttack;
+	protected bool iAttack;
 
 
 	void Start()	//instanciate our weapon and make it our child
@@ -22,13 +22,7 @@ public class WeaponController : MonoBehaviour {
 
 	void FiexedUpdate()
 	{
-		Debug.Log("fire!");
 
-		if(iAttack && (Time.time < nextAttack) )
-		{
-			nextAttack = Time.time + attackRate;
-			Attack();
-		}
 	}
 
 	void Update()

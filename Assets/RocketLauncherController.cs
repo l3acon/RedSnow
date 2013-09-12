@@ -17,4 +17,15 @@ public class RocketLauncherController : WeaponController {
 		RocketObject.AddForce(OurPlayer.transform.rotation.eulerAngles);
 
 	}
+
+	void FixedUpdate()
+	{
+		Debug.Log("fire!");
+
+		if(iAttack && (Time.time < nextAttack) )
+		{
+			nextAttack = Time.time + attackRate;
+			Attack();
+		}		
+	}
 }
