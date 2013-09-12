@@ -155,11 +155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e330e7a4c60e0a84b9facc79df47a0c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultForce: 0
   speed: 1
+  maxSpeed: 0
   jumpForce: 200
   rotationSpeed: 3
-  inAir: 1
   defaultOrientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!54 &849384816
 Rigidbody:
