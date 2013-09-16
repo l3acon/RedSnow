@@ -33,6 +33,7 @@ public class BoxController : MonoBehaviour {
 	public float jumpForce;
 	public float rotationSpeed;
 	public static bool inAir;
+	public float airTime;
 	
 	public Quaternion defaultOrientation;
 	
@@ -44,7 +45,8 @@ public class BoxController : MonoBehaviour {
 		maxSpeed = 15f;
 		jumpForce = 200f;
 		rotationSpeed = 5f;
-		inAir = true;
+		inAir = false;
+		airTime = 0;
 	}
 	
 
@@ -57,13 +59,13 @@ public class BoxController : MonoBehaviour {
 		// methods in this section will only be called if you're on the ground
 		if(inAir == false)
 		{
-			//Debug.Log("On Ground");
 			GroundInput(); // get player controls when on the ground
 		}
 		// methods to be called when in the air
-		else
+		// only call them if airTime > threshold, i.e. if you've been in the air greater than "Threshold" time. 
+			//This gets rid of the inAir variable being true when you hit little bumps.
+		else if (airTime > .1)
 		{	
-			//Debug.Log("In Air");
 			AirInput(); // get player controls when in the air
 		}
 		
@@ -82,6 +84,8 @@ public class BoxController : MonoBehaviour {
 		Vector3 forwardForce = (this.transform.forward)*speed;
 		rigidbody.transform.position += forwardForce * Time.deltaTime; 
 		
+		airTime += Time.deltaTime; // count the amount of time we've been in the air
+		
 		//Debug.Log ("Speed: "+ speed);
 		//Debug.Log("transoform.forward= " + this.transform.forward);
 		//Debug.Log("ForwardForce= " + forwardForce);
@@ -90,6 +94,7 @@ public class BoxController : MonoBehaviour {
 		//RaycastHit hitInfo;
 		//bool temp = rigidbody.SweepTest(this.transform.forward,out hitInfo);
 		//inAir = temp;
+		
 	}
 	
 	/**
@@ -116,7 +121,8 @@ public class BoxController : MonoBehaviour {
 	  * */
 	public void AirInput()
 	{
-		//Debug.Log("AirInput");
+		Debug.Log("AirInput");
+		Debug.Log ("Time: " + airTime);
 		/**
 		 * axis is float, 1 to -1. This way we can have multiple inputs.
 		 * the axis is referenced from the point of the joystick
@@ -139,7 +145,8 @@ public class BoxController : MonoBehaviour {
   * */
 	public void GroundInput()
 	{
-		//Debug.Log("AirInput");
+		Debug.Log("GroundInput");
+		airTime = 0; // we're on the ground so reset the airTime timer;
 		/**
 		 * axis is float, 1 to -1. This way we can have multiple inputs.
 		 * the axis is referenced from the point of the joystick
@@ -169,7 +176,13 @@ public class BoxController : MonoBehaviour {
 			
 			// speed up and slow down
 			// adds a force in the x direction, "verticalAxis" ranges from -1 to 1 depending on player joystick input.
-			rigidbody.AddForce(new Vector3(speed*verticalAxis,0,0));
+			Vector3 controlledSpeed = (this.transform.forward)*verticalAxis;
+			rigidbody.transform.position += controlledSpeed * Time.deltaTime;
+			Debug.Log("controlledSpeed: " + controlledSpeed);
+		
+			//Vector3 forwardForce = (this.transform.forward)*speed;
+			//rigidbody.transform.position += forwardForce * Time.deltaTime; 
+		
 	}
 	
 	public bool getInAir()
