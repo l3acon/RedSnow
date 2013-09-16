@@ -14,7 +14,6 @@ public class BoxController : MonoBehaviour {
 	 * Trick Track
 	 * 1) Fix camera so it only moves when player is on the ground. (we want the player to be able to spin when in the air)
 	 * 2) Add force when player is on ground and leans forward
-	 * 3) Edit terrain to have a slight slope all the way down, use the height variable when creating it.
 	 * 4) Get controller working for input, xbox or playstation
 	 * 5) start working on point system
 	 * 
@@ -172,5 +171,11 @@ public class BoxController : MonoBehaviour {
 			// adds a force in the x direction, "verticalAxis" ranges from -1 to 1 depending on player joystick input.
 			rigidbody.AddForce(new Vector3(speed*verticalAxis,0,0));
 	}
+	
+	public bool getInAir()
+	{
+		return inAir;
+	}
+		
 	
 }
