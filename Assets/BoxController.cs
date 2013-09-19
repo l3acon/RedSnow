@@ -28,8 +28,9 @@ public class BoxController : MonoBehaviour {
 	 **/
 	//public float defaultForce = 50f; // default 
 	
-	public float speed;
+
 	public float maxSpeed;
+	public float controlledSpeed; // speed value accounting for momentum and user input (leaning forward or back)
 	public float jumpForce;
 	public float rotationSpeed;
 	public static bool inAir;
@@ -41,12 +42,22 @@ public class BoxController : MonoBehaviour {
 	void Start () {
 	 	defaultOrientation = rigidbody.transform.rotation;
 		// set default values
-		speed = 10f;
-		maxSpeed = 15f;
+		maxSpeed = 10f;
+		controlledSpeed = 0;
 		jumpForce = 200f;
 		rotationSpeed = 5f;
 		inAir = false;
 		airTime = 0;
+		
+		// 0 friction in the forward direction,
+		// friction in all other directions.
+		// THIS IS ALL FUCKY......................
+		collider.material.frictionDirection2 = rigidbody.transform.forward;
+        collider.material.dynamicFriction2 = 0;
+        collider.material.dynamicFriction = .7f;//1;
+		collider.material.bounciness = .2f;
+		//collider.material.fr
+	
 	}
 	
 
@@ -69,6 +80,9 @@ public class BoxController : MonoBehaviour {
 			AirInput(); // get player controls when in the air
 		}
 		
+	
+		
+		 // control the camera
 		
 		inAir = true; // reset collision variable.
 	}
@@ -79,22 +93,22 @@ public class BoxController : MonoBehaviour {
 	 * */
 	void FixedUpdate () 
 	{
+
 		//camera.eventMask = 0;
-		// add a constant forward force
-		Vector3 forwardForce = (this.transform.forward)*speed;
-		rigidbody.transform.position += forwardForce * Time.deltaTime; 
+		// add a forward force, based on momentum, and controller input (leaning forward or back)
+		Vector3 forwardForce = (this.transform.forward)*controlledSpeed;
+		//rigidbody.transform.position += forwardForce * Time.deltaTime; 
+		rigidbody.AddForce(forwardForce);
+		//Debug.Log("ForwardForce= " + forwardForce);
+		
 		
 		airTime += Time.deltaTime; // count the amount of time we've been in the air
 		
 		//Debug.Log ("Speed: "+ speed);
 		//Debug.Log("transoform.forward= " + this.transform.forward);
-		//Debug.Log("ForwardForce= " + forwardForce);
+
 		
 		// check for inAir = true,false
-		//RaycastHit hitInfo;
-		//bool temp = rigidbody.SweepTest(this.transform.forward,out hitInfo);
-		//inAir = temp;
-		
 	}
 	
 	/**
@@ -121,8 +135,8 @@ public class BoxController : MonoBehaviour {
 	  * */
 	public void AirInput()
 	{
-		Debug.Log("AirInput");
-		Debug.Log ("Time: " + airTime);
+		//Debug.Log("AirInput");
+		//Debug.Log ("Time: " + airTime);
 		/**
 		 * axis is float, 1 to -1. This way we can have multiple inputs.
 		 * the axis is referenced from the point of the joystick
@@ -145,7 +159,7 @@ public class BoxController : MonoBehaviour {
   * */
 	public void GroundInput()
 	{
-		Debug.Log("GroundInput");
+		//Debug.Log("GroundInput");
 		airTime = 0; // we're on the ground so reset the airTime timer;
 		/**
 		 * axis is float, 1 to -1. This way we can have multiple inputs.
@@ -176,9 +190,8 @@ public class BoxController : MonoBehaviour {
 			
 			// speed up and slow down
 			// adds a force in the x direction, "verticalAxis" ranges from -1 to 1 depending on player joystick input.
-			Vector3 controlledSpeed = (this.transform.forward)*verticalAxis;
-			rigidbody.transform.position += controlledSpeed * Time.deltaTime;
-			Debug.Log("controlledSpeed: " + controlledSpeed);
+			//Vector3 controlledSpeed = (this.transform.forward)*verticalAxis;
+			controlledSpeed = maxSpeed*verticalAxis;
 		
 			//Vector3 forwardForce = (this.transform.forward)*speed;
 			//rigidbody.transform.position += forwardForce * Time.deltaTime; 
