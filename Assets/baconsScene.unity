@@ -87,6 +87,7 @@ GameObject:
   - 23: {fileID: 849384811}
   - 54: {fileID: 849384816}
   - 114: {fileID: 849384815}
+  - 114: {fileID: 849384817}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Player
@@ -137,12 +138,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 849384810}
-  m_LocalRotation: {x: 0, y: .344743431, z: 0, w: .93869704}
-  m_LocalPosition: {x: 152.462524, y: 297.837646, z: 1528.79138}
+  m_LocalRotation: {x: .00751924096, y: .0638246834, z: .00332764746, w: .997927308}
+  m_LocalPosition: {x: 386.651947, y: 600.968323, z: 1450.88}
   m_LocalScale: {x: 1, y: .25236848, z: 3.0539577}
   m_Children:
   - {fileID: 1877950245}
-  - {fileID: 1781158311}
   m_Father: {fileID: 0}
 --- !u!114 &849384815
 MonoBehaviour:
@@ -155,10 +155,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e330e7a4c60e0a84b9facc79df47a0c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
   maxSpeed: 0
+  controlledSpeed: 0
   jumpForce: 200
   rotationSpeed: 3
+  airTime: 0
   defaultOrientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!54 &849384816
 Rigidbody:
@@ -175,6 +176,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &849384817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 849384810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a0770b63c26c742a0dce48be9eab74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RocketObject: {fileID: 5400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
+  RocketOffset: {x: 0, y: 0, z: 0}
+  RocketTransform: {fileID: 400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
+  WeaponObject: {fileID: 100000, guid: 73e105909f65a304fa15f4fdfc9969b2, type: 2}
+  OurPlayer: {fileID: 849384816}
+  weaponOffset: {x: 0, y: 2, z: 0}
+  attackRate: 1
+  rocketForce: 2
+  Rockets: []
 --- !u!1 &1112636164
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,55 +318,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1471189654}
-  m_LocalRotation: {x: .548111081, y: .148135588, z: .509385645, w: .646650195}
+  m_LocalRotation: {x: .807433724, y: -.154740468, z: .205694884, w: .53084439}
   m_LocalPosition: {x: -6.00111961, y: 40.4430809, z: 2.77370071}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
---- !u!1 &1781158310
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1781158311}
-  - 114: {fileID: 1781158313}
-  m_Layer: 0
-  m_Name: RoecketLauncher
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1781158311
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1781158310}
-  m_LocalRotation: {x: 0, y: -.344743431, z: 0, w: .93869704}
-  m_LocalPosition: {x: .0332774296, y: .466769278, z: -.0982921496}
-  m_LocalScale: {x: .718271077, y: 3.96246004, z: .609172761}
-  m_Children: []
-  m_Father: {fileID: 849384814}
---- !u!114 &1781158313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1781158310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5a0770b63c26c742a0dce48be9eab74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WeaponObject: {fileID: 100000, guid: 73e105909f65a304fa15f4fdfc9969b2, type: 2}
-  OurPlayer: {fileID: 849384816}
-  weaponOffset: {x: 0, y: 2, z: 0}
-  attackRate: 3
-  RocketObject: {fileID: 5400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
-  RocketOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1877950244
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +335,6 @@ GameObject:
   - 124: {fileID: 1877950248}
   - 92: {fileID: 1877950247}
   - 81: {fileID: 1877950246}
-  - 45: {fileID: 1877950250}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -425,12 +401,4 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_HDR: 1
---- !u!45 &1877950250
-Skybox:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1877950244}
-  m_Enabled: 1
-  m_CustomSkybox: {fileID: 2100000, guid: a2126534b3a11b34e977105bd9e3cc03, type: 2}
+  m_HDR: 0

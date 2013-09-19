@@ -14,6 +14,7 @@ public class WeaponController : MonoBehaviour {
 
 	void Start()	//instanciate our weapon and make it our child
 	{
+		Debug.Log("dome");
 		GameObject clone = Instantiate(WeaponObject, OurPlayer.position + weaponOffset, Quaternion.identity) as GameObject;
 		clone.transform.parent = OurPlayer.transform;
 
