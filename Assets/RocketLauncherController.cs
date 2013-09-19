@@ -6,22 +6,25 @@ public class RocketLauncherController : WeaponController {
 
 	public Rigidbody RocketObject;
 	public Vector3 RocketOffset;
+	public Transform RocketTransform;
 	//public Vector3 RocketRotation;
 
-	private List<Transform> RocketTransforms;
+	public List<Rigidbody> Rockets;
 
+	void Start()
+	{
+		Rockets = new List<Rigidbody>();
+	}
 
 	void Attack()
 	{
-		Instantiate(RocketObject, RocketObject.position + RocketOffset, Quaternion.identity);
-		RocketObject.AddForce(OurPlayer.transform.rotation.eulerAngles);
-
+		Debug.Log("fire!");
+		Rockets.Add(Instantiate(RocketObject, RocketObject.position + RocketOffset, Quaternion.identity) as Rigidbody);
+		
 	}
 
 	void FixedUpdate()
 	{
-		Debug.Log("fire!");
-
 		if(iAttack && (Time.time < nextAttack) )
 		{
 			nextAttack = Time.time + attackRate;
