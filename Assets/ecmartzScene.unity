@@ -138,10 +138,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 849384810}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 600, y: 601, z: 1450}
   m_LocalScale: {x: 1, y: .25, z: 3}
-  m_Children: []
-  m_Father: {fileID: 1947541871}
+  m_Children:
+  - {fileID: 1877950245}
+  m_Father: {fileID: 0}
 --- !u!114 &849384815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,11 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e330e7a4c60e0a84b9facc79df47a0c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultForce: 0
-  speed: 1
+  maxSpeed: 0
+  controlledSpeed: 0
   jumpForce: 200
   rotationSpeed: 3
-  inAir: 1
+  airTime: 0
   defaultOrientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!54 &849384816
 Rigidbody:
@@ -313,7 +314,7 @@ GameObject:
   - 124: {fileID: 1877950248}
   - 92: {fileID: 1877950247}
   - 81: {fileID: 1877950246}
-  - 114: {fileID: 1877950250}
+  - 114: {fileID: 1877950251}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -328,10 +329,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1877950244}
   m_LocalRotation: {x: .258819044, y: 0, z: 0, w: .965925813}
-  m_LocalPosition: {x: 0, y: 4, z: -5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 12, z: -1.66666675}
+  m_LocalScale: {x: 1, y: 8.91276169, z: 3.6132822}
   m_Children: []
-  m_Father: {fileID: 1947541871}
+  m_Father: {fileID: 849384814}
 --- !u!81 &1877950246
 AudioListener:
   m_ObjectHideFlags: 0
@@ -381,7 +382,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_HDR: 0
---- !u!114 &1877950250
+--- !u!114 &1877950251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -392,33 +393,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 239019cbbd8a866498d168fe54b8c6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 849384810}
-  damping: 1
---- !u!1 &1947541870
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1947541871}
-  m_Layer: 0
-  m_Name: entityPlayer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1947541871
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1947541870}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 152, y: 298, z: 1529}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1877950245}
-  - {fileID: 849384814}
-  m_Father: {fileID: 0}
+  target: {fileID: 849384814}
+  damping: 10
