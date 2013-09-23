@@ -3,7 +3,7 @@ using System.Collections;
 
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Camera))]
+//[RequireComponent(typeof(Camera))]
 public class BoxController : MonoBehaviour {
 	
 
@@ -33,8 +33,9 @@ public class BoxController : MonoBehaviour {
 	public float controlledSpeed; // speed value accounting for momentum and user input (leaning forward or back)
 	public float jumpForce;
 	public float rotationSpeed;
-	public static bool inAir;
+	public bool inAir;
 	public float airTime;
+	public int points;
 	
 	public Quaternion defaultOrientation;
 	
@@ -48,6 +49,7 @@ public class BoxController : MonoBehaviour {
 		rotationSpeed = 5f;
 		inAir = false;
 		airTime = 0;
+		points = 0;
 		
 		// 0 friction in the forward direction,
 		// friction in all other directions.
@@ -67,7 +69,9 @@ public class BoxController : MonoBehaviour {
 	  * */
 	void Update()
 	{
-		// methods in this section will only be called if you're on the ground
+	 
+		//Debug.Log("inAir = " +inAir);
+		
 		if(inAir == false)
 		{
 			GroundInput(); // get player controls when on the ground
@@ -84,7 +88,7 @@ public class BoxController : MonoBehaviour {
 		
 		 // control the camera
 		
-		inAir = true; // reset collision variable.
+		//inAir = true; // reset collision variable.
 	}
 
 	/*
@@ -122,11 +126,18 @@ public class BoxController : MonoBehaviour {
 		
 		//camera.eventMask = 1;
 		// if it was a terrain collision, a.k.a. you're on the ground
+		//Debug.Log("Collision");
 		if(collision.collider.name == "Terrain")
 		{
 			inAir = false;
 		}
 	}
+	void OnCollisionExit(Collision collision)
+	{
+			//Debug.Log("no longer colliding");
+			inAir = true;	
+	}
+	
 	
 	
 	/**
@@ -180,6 +191,7 @@ public class BoxController : MonoBehaviour {
 			{
 				//Debug.Log("Jumping");
 				rigidbody.AddForce(new Vector3(0,jumpForce,0));
+				
 			}
 			
 			// reset button
@@ -205,3 +217,6 @@ public class BoxController : MonoBehaviour {
 		
 	
 }
+
+
+	
