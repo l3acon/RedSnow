@@ -15,25 +15,30 @@ public class FollowCamera : MonoBehaviour {
 	
 
 	public float damping = 1.0f;
+	public GameObject target;
+	public float height = 5.0f;
+	public float distance = 7.0f;
 	
 	private Vector3 offset;
-	public GameObject target;
+	private Transform _target;
+
 	//public Transform target;
 	private float currentAngle;
 	private float desiredAngle;
 	private float angle;
 	private Quaternion rotation;
-	GameObject theCube;
-	BoxController bc;
+	//GameObject theCube;
+	private BoxController bc;
 	
 	// Use this for initialization
 	void Start () {
 		
 		//offset = target.transform.position - transform.position; // on ground - follow rotation
+		transform.position = new Vector3(target.transform.position.x,target.transform.position.y + height, target.transform.position.z - distance);
 		offset = transform.position - target.transform.position; // in air - don't follow rotation
 		//target = target;
 		
-		theCube = GameObject.Find("Cube");
+		//theCube = GameObject.Find("Cube");
 		
 	}
 	
