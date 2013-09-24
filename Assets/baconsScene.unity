@@ -192,12 +192,12 @@ MonoBehaviour:
   WeaponObject: {fileID: 100000, guid: 73e105909f65a304fa15f4fdfc9969b2, type: 2}
   OurPlayer: {fileID: 849384816}
   weaponOffset: {x: 0, y: 2, z: 0}
-  attackRate: 2
+  attackRate: .5
   nextAttack: 2
   RocketObject: {fileID: 5400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
   RocketOffset: {x: 0, y: 2, z: 0}
   RocketTransform: {fileID: 400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
-  rocketForce: 2
+  rocketForce: 20
   Rockets: []
 --- !u!1 &1112636164
 GameObject:

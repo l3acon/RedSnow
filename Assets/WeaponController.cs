@@ -12,7 +12,6 @@ public class WeaponController : MonoBehaviour {
 	protected bool iAttack;
 
 
-
 	protected virtual void Attack() {}
 
 	protected void AttackCheck()
@@ -22,7 +21,6 @@ public class WeaponController : MonoBehaviour {
 		{
 			nextAttack = Time.time + attackRate;
 			
-
 			Attack();
 		}
 	}
@@ -30,12 +28,9 @@ public class WeaponController : MonoBehaviour {
 
 	protected void Setup()
 	{
-		Debug.Log("dome");
 		GameObject clone = Instantiate(WeaponObject, OurPlayer.position + weaponOffset, Quaternion.identity) as GameObject;
 		clone.transform.parent = OurPlayer.transform;
 
 		nextAttack = attackRate;
-
 	}
-
 }
