@@ -159,7 +159,9 @@ MonoBehaviour:
   controlledSpeed: 0
   jumpForce: 200
   rotationSpeed: 3
+  inAir: 0
   airTime: 0
+  points: 0
   defaultOrientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!54 &849384816
 Rigidbody:
@@ -187,13 +189,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a0770b63c26c742a0dce48be9eab74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RocketObject: {fileID: 5400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
-  RocketOffset: {x: 0, y: 0, z: 0}
-  RocketTransform: {fileID: 400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
   WeaponObject: {fileID: 100000, guid: 73e105909f65a304fa15f4fdfc9969b2, type: 2}
   OurPlayer: {fileID: 849384816}
   weaponOffset: {x: 0, y: 2, z: 0}
-  attackRate: 1
+  attackRate: 2
+  nextAttack: 2
+  RocketObject: {fileID: 5400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
+  RocketOffset: {x: 0, y: 2, z: 0}
+  RocketTransform: {fileID: 400000, guid: 4f621c1a072dda34da71930b77689a55, type: 2}
   rocketForce: 2
   Rockets: []
 --- !u!1 &1112636164
