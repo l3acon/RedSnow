@@ -201,7 +201,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 331aa362986f4434db3e6e776de970b7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -425,7 +425,7 @@ GameObject:
   - 114: {fileID: 1877950251}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -502,4 +502,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damping: 1
-  target: {fileID: 849384810}
+  target: {fileID: 849384814}
+  height: 5
+  distance: 7

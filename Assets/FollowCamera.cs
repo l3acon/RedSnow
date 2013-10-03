@@ -11,56 +11,51 @@ using System.Collections;
 /// 	then perform a LookAt() to the crosshair object.
 /// </summary>/
 
+[RequireComponent(typeof(Rigidbody))]
+
 public class FollowCamera : MonoBehaviour {
 	
 
-	public float damping = 1.0f;
-	public GameObject target;
-	public float height = 5.0f;
-	public float distance = 7.0f;
+	public float damping = 1.0f;	//Damping factor: How fast the camera adjusts
+	public Transform target;		//Target: Who is the camera following?
+	public float height = 5.0f;		//Height: How high above the camera is from the target?
+	public float distance = 7.0f;	//Distance: How far away is the camera from the target?
 	
-	private Vector3 offset;
-	private Transform _target;
-
-	//public Transform target;
-	private float currentAngle;
-	private float desiredAngle;
-	private float angle;
-	private Quaternion rotation;
-	//GameObject theCube;
-	private BoxController bc;
+	private Vector3 offset;			//Offset: Initialization offset position
+	private Vector3 targetPosition;
 	
 	// Use this for initialization
-	void Start () {
-		
-		//offset = target.transform.position - transform.position; // on ground - follow rotation
+	void Start () 
+	{
 		transform.position = new Vector3(target.transform.position.x,target.transform.position.y + height, target.transform.position.z - distance);
 		offset = transform.position - target.transform.position; // in air - don't follow rotation
-		//target = target;
-		
-		//theCube = GameObject.Find("Cube");
 		
 	}
 	
 	// Update is called once per frame
 	void LateUpdate () {
-		//Debug.Log("cameraUPDate");
-		//Debug.Log("inAir: " + bc.getInAir());
 		
-		
-		//offset = transform.position - target.transform.position; // in air - don't follow rotation
-		// update position relative to target, follow the player
-		Vector3 desiredPosition = target.transform.position + offset;
-   		Vector3 position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * damping); // move smoothly
-   	  	transform.position = position; // update position
-		transform.LookAt(target.transform.position); // look at the player
-		
-
+		MoveCamera();
 		
 		// An aiming feature would require the player to hold a mouse or controller button to aim, much like aiming
 		// in Ocarina of Time
+		
+		// TODO Camera should not go under the terrain when going down a deep slope
+		//There could be a "collider" function that prevents the camera from going under the terrain
 	}
 	
-	//There could be a "collider" function that prevents the camera from going under the terrain
+	
+
+	
+	/* MoveCamera()
+	 * All of the basic moving camera functionality belongs here.
+	 */
+	void MoveCamera()
+	{
+		targetPosition = target.position + target.up*height - target.forward*distance;
+		
+		transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime*damping);
+		transform.LookAt(target);
+	}
 	
 }
