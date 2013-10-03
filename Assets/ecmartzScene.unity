@@ -162,11 +162,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 704325571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7697fff2747558e4cb8ab756e5234bdc, type: 3}
+  m_Script: {fileID: 11500000, guid: 466bdbae3cc24df4d9437ca988421a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 849384814}
   height: 5
+  playerPic: {fileID: 0}
 --- !u!1 &849384810
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +181,7 @@ GameObject:
   - 23: {fileID: 849384811}
   - 54: {fileID: 849384816}
   - 114: {fileID: 849384815}
+  - 114: {fileID: 849384817}
   m_Layer: 0
   m_Name: modelSnowboard
   m_TagString: Player
@@ -233,8 +235,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 600, y: 601, z: 1450}
   m_LocalScale: {x: 1, y: .25, z: 3}
-  m_Children:
-  - {fileID: 1877950245}
+  m_Children: []
   m_Father: {fileID: 0}
 --- !u!114 &849384815
 MonoBehaviour:
@@ -251,7 +252,9 @@ MonoBehaviour:
   controlledSpeed: 0
   jumpForce: 200
   rotationSpeed: 3
+  inAir: 0
   airTime: 0
+  points: 0
   defaultOrientation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!54 &849384816
 Rigidbody:
@@ -268,6 +271,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &849384817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 849384810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 922ac9f772dc3374088c12ce447539fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  theCube: {fileID: 849384810}
 --- !u!1 &1112636164
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,10 +437,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1877950244}
   m_LocalRotation: {x: .258819044, y: 0, z: 0, w: .965925813}
-  m_LocalPosition: {x: 0, y: 12, z: -1.66666675}
-  m_LocalScale: {x: 1, y: 8.91276169, z: 3.6132822}
+  m_LocalPosition: {x: 600, y: 604, z: 1445}
+  m_LocalScale: {x: 1, y: 8.35571384, z: 8.3557148}
   m_Children: []
-  m_Father: {fileID: 849384814}
+  m_Father: {fileID: 0}
 --- !u!81 &1877950246
 AudioListener:
   m_ObjectHideFlags: 0
@@ -486,5 +501,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 239019cbbd8a866498d168fe54b8c6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 849384814}
-  damping: 10
+  damping: 1
+  target: {fileID: 849384810}

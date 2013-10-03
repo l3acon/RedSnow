@@ -8,32 +8,29 @@ public class WeaponController : MonoBehaviour {
 	public Vector3 weaponOffset;
 	public float attackRate;
 
-	protected float nextAttack;
+	public float nextAttack;
 	protected bool iAttack;
 
 
-	void Start()	//instanciate our weapon and make it our child
+	protected virtual void Attack() {}
+
+	protected void AttackCheck()
 	{
-		Debug.Log("dome");
+		iAttack = Input.GetButton("Fire1");
+		if(iAttack && (Time.time > nextAttack) )
+		{
+			nextAttack = Time.time + attackRate;
+			
+			Attack();
+		}
+	}
+
+
+	protected void Setup()
+	{
 		GameObject clone = Instantiate(WeaponObject, OurPlayer.position + weaponOffset, Quaternion.identity) as GameObject;
 		clone.transform.parent = OurPlayer.transform;
 
 		nextAttack = attackRate;
 	}
-
-	void FiexedUpdate()
-	{
-
-	}
-
-	void Update()
-	{
-		iAttack = Input.GetButton("Fire1");
-	}
-
-	void Attack()
-	{
-		
-	}
-
 }
