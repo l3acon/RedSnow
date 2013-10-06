@@ -30,6 +30,7 @@ public class TrickController : MonoBehaviour
 	float lastFlipRotation; // the flip rotation angle at the last state
 	float lastSpinRotation; // the flip rotation angle at the last state
 	Vector3 lastSpinAngle;
+	
 	void Start()
 	{
 		//theCube = GameObject.Find("Cube"); Kurt's code
@@ -255,10 +256,16 @@ public class TrickController : MonoBehaviour
 		return avgAirTime;	
 	}
 	
+	//@author: kurt
 	void OnGUI() {
+		
 		GUI.color = Color.red; // set the color
 		string score = "SCORE: " + points;
-        GUI.Label(new Rect(100, 20, 100, 20),score); // draw text
+		string spins = "Spins: " + spinCount;
+		string flips = "Flips: " + flipCount;
+        GUI.Label(new Rect(10, 30, 100, 20),score); // draw text
+		GUI.Label (new Rect(10, 50, 100, 20), spins);
+		GUI.Label (new Rect(10, 70, 100, 20), flips);
 		//GUI.Label(new Rect(825, 30, 29, 37), playerPic ); // draw a texture
 		//Debug.Log("screenPoint: " + camera.ViewportToScreenPoint(this.transform.position));
     }

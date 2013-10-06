@@ -32,12 +32,23 @@ public class BoxController : MonoBehaviour {
 	public float maxSpeed;
 	public float controlledSpeed; // speed value accounting for momentum and user input (leaning forward or back)
 	public float jumpForce;
-	public float rotationSpeed;
+	public float turnSpeed; // speed at which you turn on the ground
+	public float crouchedTurnSpeed; // rotate slower when crouched
 	public bool inAir;
 	public float airTime;
 	public int points;
 	
 	public Quaternion defaultOrientation;
+	
+	
+	private float horizontalAxisAtJump = 0; // the value of the joystick right before the jump
+	private float verticalAxisAtJump = 0;// the value of the joystick right before the jump
+	private bool initialJump; // stating if we just started the jump, or if we've been in air for a bit
+	private float loadedSpinTorque; // the torque the player will start spinning at once they jump
+	private float loadedFlipTorque; // the torque the player will start flipping at once they jump
+	private float airControl; // how well the player can control themselves in the air
+	private float loadXTime = 0; // keeps track of how long the player has been crouched
+	private float loadYTime = 0;
 	
 	// Use this for initialization
 	void Start () {
@@ -45,11 +56,16 @@ public class BoxController : MonoBehaviour {
 		// set default values
 		maxSpeed = 10f;
 		controlledSpeed = 0;
-		jumpForce = 200f;
-		rotationSpeed = 5f;
+		jumpForce = 500f;
+		turnSpeed = 5f;
+		crouchedTurnSpeed = .5f;
 		inAir = false;
 		airTime = 0;
 		points = 0;
+		loadedSpinTorque = 0;
+		loadedSpinTorque = 0;
+		airControl = 5;
+	
 		
 		// 0 friction in the forward direction,
 		// friction in all other directions.
@@ -62,7 +78,27 @@ public class BoxController : MonoBehaviour {
 	
 	}
 	
-
+	private void loadedJump()
+	{
+		Debug.Log ("Spin: " + loadedSpinTorque);
+		Debug.Log ("Flip: " + loadedFlipTorque);
+		if(loadedSpinTorque > 0)
+		{
+			rigidbody.AddTorque(loadedSpinTorque*horizontalAxisAtJump*transform.up);
+		}
+		else{
+			rigidbody.AddTorque(loadedSpinTorque*horizontalAxisAtJump*transform.up*-1);
+		}
+		if(loadedFlipTorque > 0)
+		{
+			rigidbody.AddTorque(loadedFlipTorque*verticalAxisAtJump*transform.right);
+		}
+		else{
+			rigidbody.AddTorque(loadedFlipTorque*verticalAxisAtJump*transform.right*-1);
+		}
+		initialJump = false;
+	}
+	
 	/*
 	  * Update is called once per frame, main script functionality
 	  * author: kurtdog
@@ -75,12 +111,19 @@ public class BoxController : MonoBehaviour {
 		if(inAir == false)
 		{
 			GroundInput(); // get player controls when on the ground
+			initialJump = true;
 		}
 		// methods to be called when in the air
 		// only call them if airTime > threshold, i.e. if you've been in the air greater than "Threshold" time. 
 			//This gets rid of the inAir variable being true when you hit little bumps.
 		else if (airTime > .1)
 		{	
+			// when we first jump, apply an initial torque
+			if(initialJump == true)
+			{
+				loadedJump();
+			}
+			// after that, when in the air, allow the player to add smaller torques
 			AirInput(); // get player controls when in the air
 		}
 		
@@ -157,9 +200,12 @@ public class BoxController : MonoBehaviour {
 		//Debug.Log("verticalAxis: " + verticalAxis);
 		//Debug.Log("horizontalAxis: " + horizontalAxis);
 
-		rigidbody.transform.Rotate(0,rotationSpeed*horizontalAxis,0); // rotate on the horizontal axis, left and right 
-		rigidbody.transform.Rotate(rotationSpeed*verticalAxis,0,0); // rotate on the horizontal axis, up and down
-	
+		//rigidbody.transform.Rotate(0,turnSpeed*horizontalAxis,0); // rotate on the horizontal axis, left and right 
+		//rigidbody.transform.Rotate(turnSpeed*verticalAxis,0,0); // rotate on the horizontal axis, up and down
+		
+		 // add a torque, instead of just a constant rotation - more realistic
+		rigidbody.AddTorque(airControl*horizontalAxis*transform.up);
+		rigidbody.AddTorque(airControl*verticalAxis*transform.right);
 		
 	}
 	
@@ -178,35 +224,63 @@ public class BoxController : MonoBehaviour {
 		 **/
 		float verticalAxis = Input.GetAxis("Vertical");
 		float horizontalAxis = Input.GetAxis("Horizontal");
-		//Debug.Log("verticalAxis: " + verticalAxis);
-		//Debug.Log("horizontalAxis: " + horizontalAxis);
-
-		rigidbody.transform.Rotate(0,rotationSpeed*horizontalAxis,0); // rotate on the horizontal axis, left and right 
-		//rigidbody.transform.Rotate(rotationSpeed*verticalAxis,0,0); // rotate on the vertical axis, up and down
-	
 		
-			//Debug.Log ("Colliding");
-			// Jump
-			if(Input.GetAxis("Jump") > .001)// if pressing jump key
-			{
-				//Debug.Log("Jumping");
-				rigidbody.AddForce(new Vector3(0,jumpForce,0));
-				
-			}
-			
-			// reset button
-			if(Input.GetKey(KeyCode.R)) //we should update this to refer to a global reset button (not just for PC)
-			{
-				rigidbody.transform.rotation = defaultOrientation;
-			}
-			
-			// speed up and slow down
-			// adds a force in the x direction, "verticalAxis" ranges from -1 to 1 depending on player joystick input.
-			//Vector3 controlledSpeed = (this.transform.forward)*verticalAxis;
+		// when on the ground, update these vars, they're sent to air input to calculate torque for spins and flips
+		horizontalAxisAtJump = horizontalAxis;
+		verticalAxisAtJump = verticalAxis;
+		
+		
+		// if crouched
+		if(Input.GetButton("Jump"))
+		{
+			// rotate slowely
+			loadTorque();
+			rigidbody.transform.Rotate(0,crouchedTurnSpeed*horizontalAxis,0); // rotate on the horizontal axis, left and right 
+			//Debug.Log("MOVE SLOWLY");
+		}
+		// otherwise
+		else{
+			// move normally
+			rigidbody.transform.Rotate(0,turnSpeed*horizontalAxis,0); // rotate on the horizontal axis, left and right 
 			controlledSpeed = maxSpeed*verticalAxis;
+		}
+
 		
-			//Vector3 forwardForce = (this.transform.forward)*speed;
-			//rigidbody.transform.position += forwardForce * Time.deltaTime; 
+		// if Key is Released
+		if(Input.GetButtonUp("Jump"))// if pressing jump key
+		{
+			//Debug.Log("Jumping");
+			rigidbody.AddForce(new Vector3(0,jumpForce,0));
+			loadXTime = 0;
+			loadYTime = 0;
+		}
+		
+		// reset button
+		if(Input.GetKey(KeyCode.R)) //we should update this to refer to a global reset button (not just for PC)
+		{
+			rigidbody.transform.rotation = defaultOrientation;
+		}
+		
+		// speed up and slow down
+		// adds a force in the x direction, "verticalAxis" ranges from -1 to 1 depending on player joystick input.
+		//Vector3 controlledSpeed = (this.transform.forward)*verticalAxis;
+		
+	
+		//Vector3 forwardForce = (this.transform.forward)*speed;
+		//rigidbody.transform.position += forwardForce * Time.deltaTime; 
+	
+	}
+	
+	private void loadTorque()
+	{
+		
+		loadXTime += Time.fixedDeltaTime*Input.GetAxis("Horizontal");
+		loadYTime += Time.fixedDeltaTime*Input.GetAxis("Vertical");	
+		//Debug.Log ("loadXTime: " + loadXTime);
+		//Debug.Log ("loadYTime: " + loadYTime);
+		
+		loadedSpinTorque = loadXTime*100;
+		loadedFlipTorque = loadYTime*100;
 		
 	}
 	
