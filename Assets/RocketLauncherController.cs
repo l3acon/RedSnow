@@ -18,7 +18,7 @@ public class RocketLauncherController : WeaponController {
 		myRocketLauncher.transform.parent = OurPlayer.transform;
 
 		nextAttack = attackRate;
-		Setup();
+		//Setup();
 	}
 
 	override protected void Attack()
