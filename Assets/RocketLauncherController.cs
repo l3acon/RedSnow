@@ -10,21 +10,27 @@ public class RocketLauncherController : WeaponController {
 
 	public float rocketForce;
 	public List<Rigidbody> Rockets;
+	FollowCamera followCamera;
+	public GameObject obj;
 
 	void Start()	//instanciate our weapon and make it our child
 	{
+		followCamera = obj.GetComponent<FollowCamera>();
+		
 		Rockets = new List<Rigidbody>();
 		GameObject myRocketLauncher = Instantiate(WeaponObject, OurPlayer.position + weaponOffset, Quaternion.identity) as GameObject;
 		myRocketLauncher.transform.parent = OurPlayer.transform;
 
 		nextAttack = attackRate;
-		Setup();
+		//Setup();
 	}
 
 	override protected void Attack()
 	{
 		Rigidbody tmp = Instantiate(RocketObject, OurPlayer.transform.position + RocketOffset, RocketObject.rotation) as Rigidbody;
-		tmp.AddForce(rocketForce * (OurPlayer.transform.forward));
+		Debug.Log("aimerVector: " + followCamera.aimerVector);
+		tmp.AddForce(rocketForce * followCamera.aimerVector);
+		//tmp.AddForce(rocketForce * (OurPlayer.transform.forward));
 		Rockets.Add(tmp);
 	}
 

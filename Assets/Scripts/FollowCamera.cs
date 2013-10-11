@@ -31,7 +31,8 @@ public class FollowCamera : MonoBehaviour {
 	private Vector3 aimerForward;// save the player's position.forward vector as soon as the mousaim button is clicked
 	private bool inAirCurrentState = false;
 	private float downRange = 2;
-	private Vector3 aimer;
+	private Vector3 aimer; // the aiming point, we move it around, then call "lookAt();
+	public Vector3 aimerVector; // the vector from camera to "aimer" 
 	private float aimerXOffset;
 	private float aimerYOffset;
 	//private Vector3 lastAimer;
@@ -82,7 +83,8 @@ public class FollowCamera : MonoBehaviour {
 		
 		transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime*damping);
 		transform.LookAt(aimer);
-	
+		aimerVector = -((transform.position + new Vector3(0,1,0)) - aimer);
+		//aimerVector.y = -aimerVector.y; // invert y axis
 		
 	}
 	
