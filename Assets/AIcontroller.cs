@@ -1,25 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 //[RequireComponent(typeof(Camera))]
-public class BoxController : MonoBehaviour {
+public class AIcontroller : MonoBehaviour {
 	
 
 	
 	/**
-	 * TODO
+	 * STATE MACHINE
 	 * 
-	 * Trick Track
-	 * 
-	 * Weapons Track
-
-	 * 
+	 *-movement, waypoints(arrows) will be placed across the map, indicating direction vectors
+	 *	get the closest waypoint
+	 *		move in that direction
+	 *	check for trick zones and other players
+	 *		move accordingly, to set yourself up for tricks, or to engage players
+	 *	
+	 *-combat
+	 *	if any other player is within a certain distance, shoot at them with a variable rate and accuracy
+	 *
+	 *-performTricks, we'll use trick zones, rectangles placed before the ramps and rails to indicate a trick should be performed. They'll also have a uniform direction vector
+	 *	ramp trick zone
+	 *		once you've entered a ready state (you've moved into place), load a random trick.
+	 *	rail trick zone
 	 *
 	 * 
 	 **/
 	//public float defaultForce = 50f; // default 
+	public List<GameObject> waypoints;
+	public List<GameObject> targets;
+	public int range; // if targets are within this range, shoot them
+	GameObject waypoint; // current waypoint
+	GameObject target; // current target
+
 	
 
 	private float maxSpeed; // max speed value
@@ -49,6 +63,10 @@ public class BoxController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		
+		// add in all the waypoints on the map
+
+		
 	 	defaultOrientation = rigidbody.transform.rotation;
 		// set default values
 		maxSpeed = 10f;
@@ -63,6 +81,7 @@ public class BoxController : MonoBehaviour {
 		loadedSpinTorque = 0;
 		loadedSpinTorque = 0;
 		airControl = 5;
+		
 	
 		
 		// 0 friction in the forward direction,
@@ -97,6 +116,9 @@ public class BoxController : MonoBehaviour {
 		initialJump = false;
 	}
 	
+
+	
+	
 	/*
 	  * Update is called once per frame, main script functionality
 	  * author: kurtdog
@@ -107,7 +129,7 @@ public class BoxController : MonoBehaviour {
 	void Update()
 	{
 	 
-		//Debug.Log("inAir = " +inAir);
+		
 		
 		if(inAir == false)
 		{
@@ -129,7 +151,7 @@ public class BoxController : MonoBehaviour {
 		}
 		
 	
-		//Debug.Log("Grinding: " + grinding);
+		combat();
 	}
 
 	/*
@@ -145,13 +167,14 @@ public class BoxController : MonoBehaviour {
 		if(grinding == true)
 		{
 			// move in the direction of the rails grinding axis.
-			Vector3 antiGravity = 20*this.transform.up; // turn down gravity a bit to make it easier to stay on the rail
+			Vector3 antiGravity = 10*this.transform.up; // turn down gravity a bit to make it easier to stay on the rail
 			float railSpeed = controlledSpeed + 10; // set the speed at which you travel along the rail
 			forwardForce = (railVector)*railSpeed + antiGravity;
 			Debug.Log("RailVector: " + railVector);
 			Debug.Log("ForceApplied: " + forwardForce);
 		}
 		else{
+
 			forwardForce = (this.transform.forward)*controlledSpeed;
 		}
 		 
@@ -189,7 +212,6 @@ public class BoxController : MonoBehaviour {
 		if(collision.collider.name == "Rail")
 		{
 			grinding = true;
-			inAir = false;
 			GameObject rail = collision.collider.gameObject;
 			railVector = rail.transform.up;
 		}
@@ -204,7 +226,6 @@ public class BoxController : MonoBehaviour {
 		if(collision.collider.name == "Rail")
 		{
 			grinding = false;
-			inAir = true;	
 		}
 	}
 	
@@ -236,6 +257,78 @@ public class BoxController : MonoBehaviour {
 		
 	}
 	
+	/**
+	 * get the closest waypoint to the player
+	 * author: kurtdog
+	 * */
+	public GameObject getClosestWaypoint()
+	{
+		GameObject startingWaypoint = waypoints[0];
+		GameObject currentWaypoint = startingWaypoint; // initialize currentWaypoint as the first waypoing
+		float minDistance = Vector3.Distance(startingWaypoint.gameObject.transform.position,transform.position); // initialize minDistance as the distance between the player and the first waypoint
+		
+		
+		// for all the waypoints
+		foreach(GameObject wp in waypoints)
+		{
+			// get the distance to that waypoint
+			float distance = Vector3.Distance(wp.transform.position,transform.position);
+			//if the distance is less than minDistance, update minDistance and currentWaypoint
+			if(distance < minDistance)
+			{
+				minDistance = distance;
+				currentWaypoint = wp;
+			}
+		}
+		
+		return currentWaypoint;
+	}
+	
+		/*
+	 * get the closets target, if they're within range, shoot them.
+	 * 
+	 * author: kurtdog
+	 * */
+	private void combat()
+	{
+		GameObject startingTarget = targets[0];
+		GameObject currentTarget = startingTarget; // initialize currentWaypoint as the first waypoing
+		float minDistance = Vector3.Distance(startingTarget.gameObject.transform.position,transform.position); // initialize minDistance as the distance between the player and the first waypoint
+		
+		
+		// for all the waypoints
+		foreach(GameObject tg in targets)
+		{
+			// get the distance to that waypoint
+			float distance = Vector3.Distance(tg.transform.position,transform.position);
+			//if the distance is less than minDistance, update minDistance and currentWaypoint
+			if(distance < minDistance)
+			{
+				minDistance = distance;
+				currentTarget = tg;
+			}
+		}
+		
+		if(minDistance < range)
+		{
+			//attack();
+//			wc.BotAttackCheck(currentTarget.transform.position);
+			
+		}
+	}
+	
+	/*
+	 * 
+	 * 
+	 * */
+	 private void attack()
+	{
+		//TODO: add in accuracy, attack rate, etc. based on difficulty
+		
+		//RocketLauncherController
+		
+	}
+	
 	
 	/**
   * get all input from player related to controlling behavior on the ground
@@ -249,12 +342,14 @@ public class BoxController : MonoBehaviour {
 		 * axis is float, 1 to -1. This way we can have multiple inputs.
 		 * the axis is referenced from the point of the joystick
 		 **/
-		float verticalAxis = Input.GetAxis("Vertical");
-		float horizontalAxis = Input.GetAxis("Horizontal");
+		waypoint = getClosestWaypoint();
+		Debug.Log("waypoint: " + waypoint.gameObject.name);
+		float verticalAxis = 1;//Input.GetAxis("Vertical");
+		//float horizontalAxis = //Input.GetAxis("Horizontal");
 		
 		// when on the ground, update these vars, they're sent to air input to calculate torque for spins and flips
-		horizontalAxisAtJump = horizontalAxis;
-		verticalAxisAtJump = verticalAxis;
+		//horizontalAxisAtJump = horizontalAxis;
+		//verticalAxisAtJump = verticalAxis;
 		
 		controlledSpeed = maxSpeed*verticalAxis;
 		
@@ -270,7 +365,15 @@ public class BoxController : MonoBehaviour {
 		// otherwise
 		else{
 			// move normally
-			rigidbody.transform.Rotate(0,turnSpeed*horizontalAxis,0); // rotate on the horizontal axis, left and right 
+			//rotate in the direciton of the waypoint
+			//Vector3 waypointForward = new Vector3(0,waypoint.transform.eulerAngles.y,0);
+			Vector3 AIForward = new Vector3(0,this.transform.eulerAngles.y,0);
+			
+			
+			float angle = waypoint.transform.eulerAngles.y - this.transform.eulerAngles.y;
+			//Debug.Log("Angle: " + angle);
+			Vector3 rotation = Vector3.Lerp(new Vector3(0,0,0),new Vector3(0,angle,0),1f*Time.deltaTime);
+			this.transform.Rotate(rotation); 
 			currentSpeed = controlledSpeed; // when on the ground, update and keep track of "currentSpeed"
 		}
 
@@ -285,8 +388,11 @@ public class BoxController : MonoBehaviour {
 		}
 		
 		// reset button
-		if(Input.GetKey(KeyCode.R)) //we should update this to refer to a global reset button (not just for PC)
+		//Debug.Log ("UP:" + this.transform.up);
+		Debug.Log ("difference: "+ (this.transform.localRotation.x - defaultOrientation.x));
+		if(this.transform.localRotation.x - defaultOrientation.x > 150) //we should update this to refer to a global reset button (not just for PC)
 		{
+			Debug.Log("RESET");
 			//rigidbody.transform.rotation = new Vector3(rigidbody.transform.rotation.x,defaultOrientation.y,rigidbody.transform.rotation.z);
 			rigidbody.transform.rotation = defaultOrientation;
 		}

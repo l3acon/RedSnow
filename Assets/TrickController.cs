@@ -6,7 +6,7 @@ using System.Linq;
 
 public class TrickController : MonoBehaviour
 {
-	public GameObject theCube;
+	public GameObject player;
 	
 	Vector3 startPostition;
 	Quaternion startingRotation;
@@ -19,10 +19,10 @@ public class TrickController : MonoBehaviour
 	float spinRotation;
 	int spinCount;
 	List<float> airTimes = new List<float>();
-	
 
 	// GameObject theCube Kurt's code
 	BoxController bc;
+	AIcontroller aic;
 	bool inAirLastState; // the last state of inAir
 	bool inAirCurrentState; // the current state of inAir
 	bool performingTrick;
@@ -34,7 +34,8 @@ public class TrickController : MonoBehaviour
 	void Start()
 	{
 		//theCube = GameObject.Find("Cube"); Kurt's code
-		bc = theCube.GetComponent<BoxController>();
+		bc = player.GetComponent<BoxController>();
+		//aic = player.GetComponent<AIcontroller>();
 			
 		//startPostition = bc.transform.position;
 		performingTrick = false;

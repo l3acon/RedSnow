@@ -95,7 +95,7 @@ public class FollowCamera : MonoBehaviour {
 		//aimer = target.position + (target.forward*verticalAxis+target.right*horizontalAxis);
 		
 		// if pressing Right Click
-		if(Input.GetAxis("MouseAim") == 1)
+		if(Input.GetAxis("Fire2") == 1)
 		{
 			float mouseX = Input.GetAxis("Mouse X");
 			float mouseY = Input.GetAxis("Mouse Y");
