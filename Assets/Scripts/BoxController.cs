@@ -37,7 +37,7 @@ public class BoxController : MonoBehaviour {
 	
 	public Quaternion defaultOrientation;
 	
-	
+	private Vector3 _lastVelocity;
 	private float horizontalAxisAtJump = 0; // the value of the joystick right before the jump
 	private float verticalAxisAtJump = 0;// the value of the joystick right before the jump
 	private bool initialJump; // stating if we just started the jump, or if we've been in air for a bit
@@ -141,22 +141,32 @@ public class BoxController : MonoBehaviour {
 
 		//camera.eventMask = 0;
 		// add a forward force, based on momentum, and controller input (leaning forward or back)
-		Vector3 forwardForce ;
+		Vector3 forwardForce;
+		
+		_lastVelocity = gameObject.rigidbody.velocity;
+		
 		if(grinding == true)
 		{
 			// move in the direction of the rails grinding axis.
-			Vector3 antiGravity = 20*this.transform.up; // turn down gravity a bit to make it easier to stay on the rail
-			float railSpeed = controlledSpeed + 10; // set the speed at which you travel along the rail
-			forwardForce = (railVector)*railSpeed + antiGravity;
-			Debug.Log("RailVector: " + railVector);
-			Debug.Log("ForceApplied: " + forwardForce);
+			//Vector3 antiGravity = new Vector3(0,9.81f,0); // turn down gravity a bit to make it easier to stay on the rail
+			//float railSpeed = controlledSpeed + 10; // set the speed at which you travel along the rail
+			//forwardForce = new Vector3(0,0,0);
+			//forwardForce = (_lastVelocity)*railSpeed + antiGravity;
+			//Debug.Log("RailVector: " + forwardForce);
+			//Debug.Log("ForceApplied: " + forwardForce);
+			if(_lastVelocity.x > _lastVelocity.z)
+				forwardForce = new Vector3(10,0,0);
+			else
+				forwardForce = new Vector3(0,0,10);
+			rigidbody.velocity = new Vector3(_lastVelocity.x,0,_lastVelocity.z);
 		}
 		else{
 			forwardForce = (this.transform.forward)*controlledSpeed;
+			rigidbody.AddForce(forwardForce);
 		}
 		 
 		//rigidbody.transform.position += forwardForce * Time.deltaTime; 
-		rigidbody.AddForce(forwardForce);
+
 		//Debug.Log("ForwardForce= " + forwardForce);
 		
 		
@@ -186,12 +196,12 @@ public class BoxController : MonoBehaviour {
 			inAir = false;
 		}
 		
-		if(collision.collider.name == "Rail")
+		if(collision.collider.tag == "Rail")
 		{
 			grinding = true;
 			inAir = false;
 			GameObject rail = collision.collider.gameObject;
-			railVector = rail.transform.up;
+			//railVector = rail.transform.up;
 		}
 	}
 	void OnCollisionExit(Collision collision)
@@ -205,6 +215,20 @@ public class BoxController : MonoBehaviour {
 		{
 			grinding = false;
 			inAir = true;	
+		}
+		grinding = false;
+	}
+	void OnCollisionEnter(Collision collision)
+	{
+		ContactPoint contact = collision.contacts[0];
+		if(collision.collider.tag == "Rail")
+		{
+			grinding = true;
+			if (contact.normal.y <= -0.6)
+			{
+				gameObject.rigidbody.isKinematic = true;
+				transform.position = contact.point - _lastVelocity.normalized * 30;
+			}
 		}
 	}
 	
