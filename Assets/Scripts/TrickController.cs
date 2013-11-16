@@ -21,7 +21,7 @@ public class TrickController : MonoBehaviour
 	List<float> airTimes = new List<float>();
 
 	// GameObject theCube Kurt's code
-	BoxController bc;
+	public BoxController bc;	// POINT THIS TO THE PLAYER
 	AIcontroller aic;
 	bool inAirLastState; // the last state of inAir
 	bool inAirCurrentState; // the current state of inAir
@@ -34,9 +34,8 @@ public class TrickController : MonoBehaviour
 	void Start()
 	{
 		//theCube = GameObject.Find("Cube"); Kurt's code
-		bc = player.GetComponent<BoxController>();
 		//aic = player.GetComponent<AIcontroller>();
-			
+		
 		//startPostition = bc.transform.position;
 		performingTrick = false;
 		inAirLastState = false;
@@ -48,8 +47,8 @@ public class TrickController : MonoBehaviour
 		flipCount = 0;
 		spinRotation = 0;
 		spinCount = 0;
-		startPostition = bc.transform.position;
-		startingRotation = bc.transform.rotation;
+		startPostition = player.transform.position;
+		startingRotation = player.transform.rotation;
 	
 		//startHeight = bc.transform.position.y;
 	}

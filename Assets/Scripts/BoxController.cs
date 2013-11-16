@@ -30,6 +30,7 @@ public class BoxController : MonoBehaviour {
 	private float crouchedTurnSpeed; // rotate slower when crouched
 	private bool grinding;
 	private Vector3 railVector;
+	
 	public bool inAir;
 	public float airTime;
 	public int points;
@@ -106,8 +107,10 @@ public class BoxController : MonoBehaviour {
 	  * */
 	void Update()
 	{
-	 
+
 		//Debug.Log("inAir = " +inAir);
+		
+		
 		
 		if(inAir == false)
 		{

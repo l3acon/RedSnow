@@ -11,7 +11,7 @@ using System.Collections;
 /// 	then perform a LookAt() to the crosshair object.
 /// </summary>/
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 
 public class FollowCamera : MonoBehaviour {
 	
