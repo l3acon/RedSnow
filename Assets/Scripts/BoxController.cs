@@ -30,6 +30,9 @@ public class BoxController : MonoBehaviour {
 	private float crouchedTurnSpeed; // rotate slower when crouched
 	private bool grinding;
 	private Vector3 railVector;
+	private BetterList<GameObject> railList;
+	private RailController railCont;
+	public GameObject[] allRails;
 	
 	public bool inAir;
 	public float airTime;
@@ -47,6 +50,15 @@ public class BoxController : MonoBehaviour {
 	private float airControl; // how well the player can control themselves in the air
 	private float loadXTime = 0; // keeps track of how long the player has been crouched
 	private float loadYTime = 0;
+	
+	
+	void Awake()
+	{
+//		int i = 0;
+//		railList.Add(GameObject.Find("rail0"));
+//		allRails = railList.ToArray();
+	}
+	
 	
 	// Use this for initialization
 	void Start () {
@@ -107,10 +119,7 @@ public class BoxController : MonoBehaviour {
 	  * */
 	void Update()
 	{
-
 		//Debug.Log("inAir = " +inAir);
-		
-		
 		
 		if(inAir == false)
 		{
@@ -157,11 +166,7 @@ public class BoxController : MonoBehaviour {
 			//forwardForce = (_lastVelocity)*railSpeed + antiGravity;
 			//Debug.Log("RailVector: " + forwardForce);
 			//Debug.Log("ForceApplied: " + forwardForce);
-			if(_lastVelocity.x > _lastVelocity.z)
-				forwardForce = new Vector3(10,0,0);
-			else
-				forwardForce = new Vector3(0,0,10);
-			rigidbody.velocity = new Vector3(_lastVelocity.x,0,_lastVelocity.z);
+			rigidbody.velocity = Vector3.Project(_lastVelocity, new Vector3(0,0,1));
 		}
 		else{
 			forwardForce = (this.transform.forward)*controlledSpeed;
