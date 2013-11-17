@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 //[RequireComponent(typeof(Camera))]
@@ -47,6 +47,7 @@ public class BoxController : MonoBehaviour {
 	private float airControl; // how well the player can control themselves in the air
 	private float loadXTime = 0; // keeps track of how long the player has been crouched
 	private float loadYTime = 0;
+	private List<string> terrainList;
 	
 	// Use this for initialization
 	void Start () {
@@ -64,7 +65,9 @@ public class BoxController : MonoBehaviour {
 		loadedSpinTorque = 0;
 		loadedSpinTorque = 0;
 		airControl = 5;
-	
+		terrainList = new List<string>();
+		terrainList.Add("Level1Terrain");
+		terrainList.Add("Level2Terrain");
 		
 		// 0 friction in the forward direction,
 		// friction in all other directions.
@@ -194,9 +197,11 @@ public class BoxController : MonoBehaviour {
 		//camera.eventMask = 1;
 		// if it was a terrain collision, a.k.a. you're on the ground
 		//Debug.Log("Collision");
-		if(collision.collider.name == "Terrain")
+		
+		if(terrainList.Contains(collision.collider.name))// == "Level1Terrain")
 		{
 			inAir = false;
+			
 		}
 		
 		if(collision.collider.tag == "Rail")
@@ -210,7 +215,7 @@ public class BoxController : MonoBehaviour {
 	void OnCollisionExit(Collision collision)
 	{
 			//Debug.Log("no longer colliding");
-		if(collision.collider.name == "Terrain")
+		if(terrainList.Contains(collision.collider.name))
 		{
 			inAir = true;	
 		}
