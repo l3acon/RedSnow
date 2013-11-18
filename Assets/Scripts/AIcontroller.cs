@@ -61,6 +61,8 @@ public class AIcontroller : MonoBehaviour {
 	private float loadXTime = 0; // keeps track of how long the player has been crouched
 	private float loadYTime = 0;
 	
+	private float xRot = 0;
+	private float lastFlipRotation;
 	// Use this for initialization
 	void Start () {
 		
@@ -68,6 +70,8 @@ public class AIcontroller : MonoBehaviour {
 
 		
 	 	defaultOrientation = rigidbody.transform.rotation;
+		lastFlipRotation = defaultOrientation.eulerAngles.x;
+		Debug.Log ("DefaultX: " + defaultOrientation.x);
 		// set default values
 		maxSpeed = 10f;
 		controlledSpeed = 10;
@@ -97,8 +101,8 @@ public class AIcontroller : MonoBehaviour {
 	
 	private void loadedJump()
 	{
-		Debug.Log ("Spin: " + loadedSpinTorque);
-		Debug.Log ("Flip: " + loadedFlipTorque);
+		//Debug.Log ("Spin: " + loadedSpinTorque);
+		//Debug.Log ("Flip: " + loadedFlipTorque);
 		if(loadedSpinTorque > 0)
 		{
 			rigidbody.AddTorque(loadedSpinTorque*horizontalAxisAtJump*transform.up);
@@ -170,8 +174,8 @@ public class AIcontroller : MonoBehaviour {
 			Vector3 antiGravity = 10*this.transform.up; // turn down gravity a bit to make it easier to stay on the rail
 			float railSpeed = controlledSpeed + 10; // set the speed at which you travel along the rail
 			forwardForce = (railVector)*railSpeed + antiGravity;
-			Debug.Log("RailVector: " + railVector);
-			Debug.Log("ForceApplied: " + forwardForce);
+			//Debug.Log("RailVector: " + railVector);
+			//Debug.Log("ForceApplied: " + forwardForce);
 		}
 		else{
 
@@ -343,7 +347,7 @@ public class AIcontroller : MonoBehaviour {
 		 * the axis is referenced from the point of the joystick
 		 **/
 		waypoint = getClosestWaypoint();
-		Debug.Log("waypoint: " + waypoint.gameObject.name);
+		//Debug.Log("waypoint: " + waypoint.gameObject.name);
 		float verticalAxis = 1;//Input.GetAxis("Vertical");
 		//float horizontalAxis = //Input.GetAxis("Horizontal");
 		
@@ -389,12 +393,17 @@ public class AIcontroller : MonoBehaviour {
 		
 		// reset button
 		//Debug.Log ("UP:" + this.transform.up);
-		Debug.Log ("difference: "+ (this.transform.localRotation.x - defaultOrientation.x));
-		if(this.transform.localRotation.x - defaultOrientation.x > 150) //we should update this to refer to a global reset button (not just for PC)
+		//Debug.Log ("difference: "+ (this.transform.localRotation.x - defaultOrientation.x));
+		
+		xRot += TrickController.deltaFlipRotation(this.transform.rotation.eulerAngles.x, lastFlipRotation);
+		Debug.Log ("Xrot: " + xRot);
+		lastFlipRotation = this.transform.rotation.eulerAngles.x;
+		if(xRot > 180) //we should update this to refer to a global reset button (not just for PC)
 		{
 			Debug.Log("RESET");
 			//rigidbody.transform.rotation = new Vector3(rigidbody.transform.rotation.x,defaultOrientation.y,rigidbody.transform.rotation.z);
 			rigidbody.transform.rotation = defaultOrientation;
+			xRot = 0;
 		}
 		
 		// speed up and slow down
