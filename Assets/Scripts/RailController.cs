@@ -11,10 +11,13 @@ using System.Collections;
 public class RailController : MonoBehaviour {
 	
 	private BetterList<Vector3> arrayRWP = new BetterList<Vector3>();	// Create an arbitrarily sized list of waypoint vectors
-	private Vector3[] railline;											// Create an arbitrarily sized array of Vector3
-	private BetterList<float> rldists = new BetterList<float>();			// List of distances between waypoints
+	public Vector3[] railpos;											// Create an arbitrarily sized array of Vector3
+	private BetterList<float> rldists = new BetterList<float>();		// List of distances between waypoints
 	private float[] rdists;
+	private BetterList<Vector3> arrayRvec = new BetterList<Vector3>();
+	public Vector3[] railvecs;
 	
+	public Vector3 testpos;
 	public bool onRail;													// Is the player on the rail?
 	public Vector3 railVec;												// Rail vector player is currently on
 	public float colliderSize;											// Rail collider area (xyz)
@@ -26,10 +29,18 @@ public class RailController : MonoBehaviour {
 			arrayRWP.Add(this.transform.GetChild(i).position);			// Add child to the list iteratively
 			//this.transform.GetChild(i).gameObject.AddComponent()
 			if(i < this.transform.childCount - 1)
+			{
 				rldists.Add(Vector3.Distance(this.transform.GetChild(i).position, this.transform.GetChild(i+1).position));
+				arrayRvec.Add(this.transform.GetChild(i+1).position - this.transform.GetChild(i).position);
+			}
 		}
-		railline = arrayRWP.ToArray();									// Convert the list into a vector array
+		railpos = arrayRWP.ToArray();									// Convert the list into a vector array
+		arrayRWP.Release();
 		rdists = rldists.ToArray();
+		rldists.Release();
+		railvecs = arrayRvec.ToArray();
+		arrayRvec.Release();
+
 		for(i = 0; i < this.transform.childCount - 1; i++)
 		{
 			makeColliders(i);	
@@ -39,16 +50,28 @@ public class RailController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		int i;
-		for(i = 0; i < (this.transform.childCount - 1); i++)
+		Vector3 temp;
+//		int i;
+//		for(i = 0; i < (this.transform.childCount - 1); i++)
+//		{
+//			onRail = Physics.Linecast(railpos[i],railpos[i+1]);
+//			if(onRail)
+//			{
+//				Debug.Log("onRail "+GetInstanceID());
+//				set_RVector(railpos[i]);
+//			}
+//			Debug.DrawLine(railpos[i],railpos[i+1]);
+//		}
+		temp = Vector3.Project(testpos,railvecs[0]);
+		Debug.DrawLine(railvecs[0],temp);
+
+	}
+
+	void OnCollisionEnter(Collision collision)
+	{
+		if(collision.collider.tag == "Player")
 		{
-			onRail = Physics.Linecast(railline[i],railline[i+1]);
-			if(onRail)
-			{
-				Debug.Log("onRail "+GetInstanceID());
-				set_RVector(railline[i]);
-			}
-			Debug.DrawLine(railline[i],railline[i+1]);
+			Debug.Log("rail hit player");
 		}
 	}
 
@@ -73,6 +96,7 @@ public class RailController : MonoBehaviour {
 		
 		bc.center = new Vector3(temp.x/2.0f, temp.y/2.0f, temp.z/2.0f);
 		bc.size = new Vector3(temp.x + colliderSize, temp.y + colliderSize, temp.z + colliderSize);
+		bc.tag = "Rail";
 	}
 	
 }

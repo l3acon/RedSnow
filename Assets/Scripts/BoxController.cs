@@ -30,15 +30,13 @@ public class BoxController : MonoBehaviour {
 	private float crouchedTurnSpeed; // rotate slower when crouched
 	private bool grinding;
 	private Vector3 railVector;
-	private BetterList<GameObject> railList;
-	private RailController railCont;
+	public Vector3[] vecRails;
+	private BetterList<Vector3> vecLRails = new BetterList<Vector3>();
+
 	public GameObject[] allRails;
-	
 	public bool inAir;
 	public float airTime;
 	public int points;
-
-	
 	public Quaternion defaultOrientation;
 	
 	private Vector3 _lastVelocity;
@@ -55,9 +53,17 @@ public class BoxController : MonoBehaviour {
 	
 	void Awake()
 	{
-//		int i = 0;
-//		railList.Add(GameObject.Find("rail0"));
-//		allRails = railList.ToArray();
+		int i,j;
+		allRails = GameObject.FindGameObjectsWithTag("Rail");
+		for(i=0; i < allRails.Length; i++)
+		{
+			for(j=0; j < allRails[i].transform.childCount-1; j++)
+			{
+				vecLRails.Add(allRails[i].transform.GetChild(j+1).position - allRails[i].transform.GetChild(j).position);
+				//Debug.Log("railVecs: "+(Vector3)(allRails[i].transform.GetChild(j+1).position - allRails[i].transform.GetChild(j).position));
+			}
+		}
+		vecRails = vecLRails.ToArray();
 	}
 	
 	
@@ -80,6 +86,8 @@ public class BoxController : MonoBehaviour {
 		terrainList = new List<string>();
 		terrainList.Add("Level1Terrain");
 		terrainList.Add("Level2Terrain");
+		terrainList.Add("New Terrain 2");
+		terrainList.Add("Terrain");
 		
 		// 0 friction in the forward direction,
 		// friction in all other directions.
@@ -123,6 +131,9 @@ public class BoxController : MonoBehaviour {
 	void Update()
 	{
 		//Debug.Log("inAir = " +inAir);
+		//Debug.Log("Closest rail: "+get_closestRailVec());
+		
+		//railVector = get_closestRailVec();
 		
 		if(inAir == false)
 		{
@@ -169,7 +180,9 @@ public class BoxController : MonoBehaviour {
 			//forwardForce = (_lastVelocity)*railSpeed + antiGravity;
 			//Debug.Log("RailVector: " + forwardForce);
 			//Debug.Log("ForceApplied: " + forwardForce);
-			rigidbody.velocity = Vector3.Project(_lastVelocity, new Vector3(0,0,1));
+			//forwardForce = Vector3.Project(_lastVelocity, railVector)*controlledSpeed;
+			//rigidbody.AddForce(forwardForce);
+			rigidbody.velocity = vecRails[0]*0.5f;
 		}
 		else{
 			forwardForce = (this.transform.forward)*controlledSpeed;
@@ -215,6 +228,7 @@ public class BoxController : MonoBehaviour {
 			inAir = false;
 			GameObject rail = collision.collider.gameObject;
 			//railVector = rail.transform.up;
+
 		}
 	}
 	void OnCollisionExit(Collision collision)
@@ -358,7 +372,25 @@ public class BoxController : MonoBehaviour {
 		return inAir;
 	}
 		
-	
+//	public Vector3 get_closestRailVec()
+//	{
+//		Vector3 curRailVec = new Vector3(Mathf.Infinity,Mathf.Infinity,Mathf.Infinity);
+//
+//		float minDist = Mathf.Infinity;
+//		float curDist = Mathf.Infinity;
+//		foreach(Vector3 rvec in vecRails)
+//		{
+//			curDist = Vector3.Distance(this.transform.position, rvec);
+//			if(curDist < minDist)
+//			{
+//				minDist = curDist;
+//				curRailVec = rvec;
+//			}
+//		}
+//		//Debug.Log("curDist: " + curDist);
+//		Debug.Log("curRailVec "+ curRailVec);
+//		return curRailVec;
+//	}
 }
 
 
