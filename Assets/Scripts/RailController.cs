@@ -23,6 +23,7 @@ public class RailController : MonoBehaviour {
 	public float colliderSize;											// Rail collider area (xyz)
 	// Initialize the size of the rail by iterating through the waypoints
 	void Start () {
+		this.gameObject.tag = "Rail";									// Makes this object a Rail (for the lazy)
 		int i;
 		for(i = 0; i < this.transform.childCount; i++)
 		{
@@ -61,18 +62,8 @@ public class RailController : MonoBehaviour {
 //				set_RVector(railpos[i]);
 //			}
 //			Debug.DrawLine(railpos[i],railpos[i+1]);
-//		}
-		temp = Vector3.Project(testpos,railvecs[0]);
-		Debug.DrawLine(railvecs[0],temp);
+//		};
 
-	}
-
-	void OnCollisionEnter(Collision collision)
-	{
-		if(collision.collider.tag == "Player")
-		{
-			Debug.Log("rail hit player");
-		}
 	}
 
 	public void set_RVector(Vector3 arg)

@@ -31,7 +31,9 @@ public class BoxController : MonoBehaviour {
 	private bool grinding;
 	private Vector3 railVector;
 	public Vector3[] vecRails;
+	public Transform[] posRails;
 	private BetterList<Vector3> vecLRails = new BetterList<Vector3>();
+	private BetterList<Transform> posLRails = new BetterList<Transform>();
 
 	public GameObject[] allRails;
 	public bool inAir;
@@ -49,6 +51,7 @@ public class BoxController : MonoBehaviour {
 	private float loadXTime = 0; // keeps track of how long the player has been crouched
 	private float loadYTime = 0;
 	private List<string> terrainList;
+	private int railc; // current collided rail collider
 	
 	
 	void Awake()
@@ -60,10 +63,14 @@ public class BoxController : MonoBehaviour {
 			for(j=0; j < allRails[i].transform.childCount-1; j++)
 			{
 				vecLRails.Add(allRails[i].transform.GetChild(j+1).position - allRails[i].transform.GetChild(j).position);
+				posLRails.Add(allRails[i].transform.GetChild(j));
 				//Debug.Log("railVecs: "+(Vector3)(allRails[i].transform.GetChild(j+1).position - allRails[i].transform.GetChild(j).position));
 			}
 		}
 		vecRails = vecLRails.ToArray();
+		vecLRails.Release();
+		posRails = posLRails.ToArray();
+		posLRails.Release();
 	}
 	
 	
@@ -182,7 +189,7 @@ public class BoxController : MonoBehaviour {
 			//Debug.Log("ForceApplied: " + forwardForce);
 			//forwardForce = Vector3.Project(_lastVelocity, railVector)*controlledSpeed;
 			//rigidbody.AddForce(forwardForce);
-			rigidbody.velocity = vecRails[0]*0.5f;
+			rigidbody.velocity = (vecRails[railc]*_lastVelocity.magnitude)/(vecRails[railc].magnitude);
 		}
 		else{
 			forwardForce = (this.transform.forward)*controlledSpeed;
@@ -233,7 +240,6 @@ public class BoxController : MonoBehaviour {
 	}
 	void OnCollisionExit(Collision collision)
 	{
-			//Debug.Log("no longer colliding");
 		if(terrainList.Contains(collision.collider.name))
 		{
 			inAir = true;	
@@ -251,11 +257,13 @@ public class BoxController : MonoBehaviour {
 		if(collision.collider.tag == "Rail")
 		{
 			grinding = true;
-			if (contact.normal.y <= -0.6)
-			{
-				gameObject.rigidbody.isKinematic = true;
-				transform.position = contact.point - _lastVelocity.normalized * 30;
-			}
+			railc = get_RailCollider(collision.collider);
+
+//			if (contact.normal.y <= -0.6)
+//			{
+//				gameObject.rigidbody.isKinematic = true;
+//				transform.position = contact.point - _lastVelocity.normalized * 30;
+//			}
 		}
 	}
 	
@@ -352,7 +360,17 @@ public class BoxController : MonoBehaviour {
 	
 	}
 	
-
+	private int get_RailCollider(Collider arg)
+	{
+		int i=0;
+		foreach(Transform tr in posRails)
+		{
+			if(tr == arg.gameObject.transform)
+				return i;
+			i++;
+		}
+		return -1;
+	}
 	
 	private void loadTorque()
 	{
