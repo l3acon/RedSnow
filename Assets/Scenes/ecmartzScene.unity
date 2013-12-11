@@ -143,7 +143,7 @@ GameObject:
   - 23: {fileID: 57491094}
   m_Layer: 0
   m_Name: wp3
-  m_TagString: Untagged
+  m_TagString: Rail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -285,7 +285,7 @@ GameObject:
   - 23: {fileID: 179805436}
   m_Layer: 0
   m_Name: wp2
-  m_TagString: Untagged
+  m_TagString: Rail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -297,7 +297,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 179805433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.61529541, y: .828186035, z: .770507812}
+  m_LocalPosition: {x: -13.8200073, y: .828186035, z: 12.0385742}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1954704520}
@@ -539,7 +539,7 @@ GameObject:
   - 23: {fileID: 748344250}
   m_Layer: 0
   m_Name: wp1
-  m_TagString: Untagged
+  m_TagString: Rail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -622,7 +622,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 40831d798ef0aa44aa029651fd23a7b7, type: 2}
+  - {fileID: 2100000, guid: 9d532e95a6b369e4f861159a565ecac4, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -635,7 +635,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 269598017}
   m_GameObject: {fileID: 1004037800}
-  m_Mesh: {fileID: 4300000, guid: d5b0128374527a0449e9091b321d2b62, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 6956e93251cfb77449a169a6b481dab6, type: 3}
 --- !u!64 &1004037804
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -649,7 +649,7 @@ MeshCollider:
   serializedVersion: 2
   m_SmoothSphereCollisions: 0
   m_Convex: 1
-  m_Mesh: {fileID: 4300000, guid: d5b0128374527a0449e9091b321d2b62, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 6956e93251cfb77449a169a6b481dab6, type: 3}
 --- !u!1 &1112636164
 GameObject:
   m_ObjectHideFlags: 0
@@ -978,7 +978,7 @@ GameObject:
   - 114: {fileID: 1954704521}
   m_Layer: 0
   m_Name: rail0
-  m_TagString: Untagged
+  m_TagString: Rail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
